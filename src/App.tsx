@@ -24,6 +24,10 @@ function App() {
     setRecords(prev => [record, ...prev]);
   };
 
+  const handleClearHistory = () => {
+    setRecords([]);
+  };
+
   return (
     <div className={`min-h-screen flex flex-col ${darkMode ? 'dark bg-gray-900' : 'bg-gray-50'}`}>
       <div className="container mx-auto px-4 py-8 flex-grow">
@@ -46,15 +50,15 @@ function App() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <AttendanceForm onSubmit={handleNewRecord} />
-          <AttendanceHistory records={records} />
+          <AttendanceHistory records={records} onClearHistory={handleClearHistory} />
         </div>
       </div>
       
       <footer className="py-4 border-t border-gray-200 dark:border-gray-700">
         <div className="container mx-auto px-4">
           <p className="text-center text-sm text-gray-600 dark:text-gray-400">
-            Made with ❤️ by{' A SRI SAI CHARAN'}
-          
+            Made with ❤️ by{'A SRI SAI CHARAN'}
+      
           </p>
         </div>
       </footer>

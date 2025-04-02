@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
-import { Download } from 'lucide-react';
+import { Download, Trash2 } from 'lucide-react';
 import { AttendanceRecord } from '../types';
 
 interface AttendanceHistoryProps {
   records: AttendanceRecord[];
+  onClearHistory: () => void;
 }
 
-const AttendanceHistory: React.FC<AttendanceHistoryProps> = ({ records }) => {
+const AttendanceHistory: React.FC<AttendanceHistoryProps> = ({ records, onClearHistory }) => {
   const [searchTerm, setSearchTerm] = useState('');
+  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
 
   const filteredRecords = records.filter(record =>
     record.studentName.toLowerCase().includes(searchTerm.toLowerCase())
@@ -35,18 +37,63 @@ const AttendanceHistory: React.FC<AttendanceHistoryProps> = ({ records }) => {
     link.click();
   };
 
+  const handleClearHistory = () => {
+    setShowConfirmDialog(true);
+  };
+
+  const confirmClearHistory = () => {
+    onClearHistory();
+    setShowConfirmDialog(false);
+  };
+
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-semibold text-gray-900 dark:text-white">Attendance History</h2>
-        <button
-          onClick={downloadCSV}
-          className="flex items-center space-x-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md transition-colors"
-        >
-          <Download className="w-4 h-4" />
-          <span>Export CSV</span>
-        </button>
+        <div className="flex space-x-2">
+          <button
+            onClick={downloadCSV}
+            className="flex items-center space-x-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md transition-colors"
+          >
+            <Download className="w-4 h-4" />
+            <span>Export CSV</span>
+          </button>
+          <button
+            onClick={handleClearHistory}
+            className="flex items-center space-x-2 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md transition-colors"
+          >
+            <Trash2 className="w-4 h-4" />
+            <span>Clear History</span>
+          </button>
+        </div>
       </div>
+
+      {showConfirmDialog && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-xl max-w-md w-full mx-4">
+            <h3 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">
+              Clear History
+            </h3>
+            <p className="text-gray-600 dark:text-gray-400 mb-6">
+              Are you sure you want to clear all attendance history? This action cannot be undone.
+            </p>
+            <div className="flex justify-end space-x-3">
+              <button
+                onClick={() => setShowConfirmDialog(false)}
+                className="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={confirmClearHistory}
+                className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
+              >
+                Clear History
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <div className="mb-4">
         <input
