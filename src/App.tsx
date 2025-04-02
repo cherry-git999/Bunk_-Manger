@@ -57,7 +57,7 @@ function App() {
       <footer className="py-4 border-t border-gray-200 dark:border-gray-700">
         <div className="container mx-auto px-4">
           <p className="text-center text-sm text-gray-600 dark:text-gray-400">
-            Made with ❤️ by{'A SRI SAI CHARAN'}
+            Made with ❤️ by{' A SRI SAI CHARAN'}
       
           </p>
         </div>
